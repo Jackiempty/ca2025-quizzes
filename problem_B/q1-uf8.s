@@ -87,7 +87,8 @@ FUNC_TEST:
   li   t3, 0               # i(t3) = 0
 
 test_loop:
-  bge  t3, 256, test_end
+  li   t4, 256
+  bge  t3, t4, test_end
   mv   t0, t3              # fl(t0) = i(t3)
 
   ############### Call Function Procedure ###############
@@ -307,9 +308,9 @@ uf8_encode:
 if1:
   addi t2, t1, -4             # exponent = msb - 4
   li   t4, 15
-  blt  t4, t2, endif2         # if(exponent > 15)
+  blt  t4, t2, en_endif2         # if(exponent > 15)
   li   t2, 15                 # exponent = 15
-endif2:
+en_endif2:
   li   t4, 0                  # e(t4) = 0
   # li   t6, 0
 if1_for:
@@ -320,18 +321,16 @@ if1_for:
   j    if1_for
 if1_for_end:
 
-
 while1:
-  beq  t2, x0, endif1:        # exponent == 0
+  beq  t2, x0, en_endif1         # exponent == 0
   bltu a0, t3, in_while1      # value < overflow
-  j    endif1
+  j    en_endif1
 in_while1:
-  sub  t3, t3, 16
+  addi t3, t3, -16
   srli t3, t3, 1
   addi t2, t2, -1
   j    while1
-
-endif1:
+en_endif1:
 
   li   t4, 15
 in_while2:
