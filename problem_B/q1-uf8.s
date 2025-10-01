@@ -24,9 +24,12 @@ main:
   #######################################################
 
   ## Save ra & Callee Saved
-  addi sp, sp, -8
-  sw   ra, 4(sp)
-  sw   s0, 0(sp)
+  addi sp, sp, -12
+  sw   ra, 8(sp)
+  sw   s0, 4(sp)
+  sw   s1, 0(sp)
+
+  li   s0, 0x01000000
 
   ############### Call Function Procedure ###############
   # Caller Saved
@@ -39,16 +42,24 @@ main:
   ## Retrieve Caller Saved
 
   bne  a0, x0 ,main_pass
+  li   s1, 88              # if not pass, load 88 to 0x01000000
+  sw   s1, 0(s0)
   li   a0, 1               # return 1
   j    main_exit
 main_pass:
-  la   s0, str_all_passed  # load string
+  # la   s0, str_all_passed  # load string
   jal  ra, print_str       # go to print string
+  li   s1, 66              # if pass, load 66 to 0x01000000
+  sw   s1, 0(s0)
   li   a0, 0               # return 0
 main_exit:
   ## Retrieve ra & Callee Saved
-  lw   ra, 0(sp)
-  addi sp, sp, 4
+  lw   ra, 8(sp)
+  lw   s0, 4(sp)
+  sw   s1, 0(sp)
+  addi sp, sp, 12
+
+  ## return
   ret
 
 print_str:
