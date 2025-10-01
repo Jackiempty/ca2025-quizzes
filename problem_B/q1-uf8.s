@@ -187,10 +187,10 @@ clz:
   #    clz
   #
   # < Parameters >
-  #    a0 : x
+  #    a1 : x
   #
   # < Return Value >
-  #    a0
+  #    a1
   #######################################################
   # < Local Variable >
   #    t0 : n
@@ -205,14 +205,14 @@ clz:
   li   t0, 32              # n = 32
   li   t1, 16              # c = 16
 clz_loop:
-  srl  t2, a0, t1          # y = x >> c
+  srl  t2, a1, t1          # y = x >> c
   beq  t2, x0, clz_skip
   sub  t0, t0, t1          # n -= c
-  mv   a0, t2              # x = y
+  mv   a1, t2              # x = y
 clz_skip:
   srli t1, t1, 1           # c >>= 1
   bne  t1, x0, clz_loop
-  sub  a0, t0, a0          # return n - x
+  sub  a1, t0, a1          # return n - x
 
   ## Retrieve ra & Callee Saved
   lw   ra, 0(sp)
@@ -293,7 +293,7 @@ uf8_encode:
   sw      t3, 0(sp)
 
   # Pass Arguments
-  mv      a0, a0
+  mv      a1, a0
   
   # Jump to Callee
   jal     ra, clz             # ra = Addr(ra = lw   t0, 20(sp) )
@@ -305,7 +305,7 @@ uf8_encode:
   lw      t3, 0(sp)
   addi    sp, sp, 16
 
-  mv      t0, a0              # lz = clz(value)
+  mv      t0, a1              # lz = clz(value)
   #######################################################
 
   li   t1, 31                 # msb
