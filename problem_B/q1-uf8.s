@@ -314,9 +314,9 @@ uf8_encode:
   li   t3, 0                  # overflow(t3) = 0
 
   li   t4, 5
-  bge  t1, t4, if1            # if(msb >=5)
-  j    endif1                 # else
-if1:
+  bge  t1, t4, en_if1         # if(msb >=5)
+  j    en_endif1              # else
+en_if1:
   addi t2, t1, -4             # exponent = msb - 4
   li   t4, 15
   blt  t4, t2, en_endif2         # if(exponent > 15)
@@ -333,7 +333,7 @@ if1_for:
 if1_for_end:
 
 while1:
-  beq  t2, x0, en_endif1         # exponent == 0
+  beq  t2, x0, en_endif1      # exponent == 0
   bltu a0, t3, in_while1      # value < overflow
   j    en_endif1
 in_while1:
